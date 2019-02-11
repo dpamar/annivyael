@@ -1,14 +1,14 @@
 var places = [
 	[45.181892, 5.722390, 'Vers la caserne de Bonne'],
-	[45.183880, 5.722311, 'En allant vers l\'école'],
-	[45.184932, 5.723209, 'Piscine...'],
-	[45.185860, 5.722615, 'De l\'autre côté de la rue'],
-	[45.186493, 5.723529, 'En avançant dans la ruelle'],
-	[45.186493, 5.723529, 'A gauche'],
+	[44.184168, 5.722311, 'En allant vers l\'école'],
+	[45.185029, 5.723160, 'Piscine...'],
+	[45.185624, 5.722760, 'De l\'autre côté de la rue'],
+	[45.186493, 5.722829, 'En avançant dans la ruelle'],
+	[45.186532, 5.722804, 'A gauche'],
 	[45.187176, 5.722497, 'On peut demander de l\'aide aux gens'],
 	[45.188017, 5.721318, 'En revenant sur la grande avenue'],
 	[45.188033, 5.718733, 'Vers le tramway'],
-	[45.183808, 5.718217, 'Direction la Makolette'],
+	[45.183371, 5.718063, 'Direction la Makolette'],
 	[45.182770, 5.717695, 'C\'est très grand !'],
 	[45.182149, 5.717807, 'Derrière la Makolette'],
 	[45.180376, 5.719218, 'Par dessus le pont'],
@@ -72,7 +72,7 @@ var options = {
 function getLocationAndThen(doThis)
 {
 	navigator.geolocation.getCurrentPosition(
-		pos => doThis([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy*100]),
+		pos => doThis([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy]),
 		err => alert(`ERREUR (${err.code}): ${err.message}`),
 		options);
 }
@@ -81,6 +81,7 @@ function isCloseTo(lat, lon, success, failure)
 {
 	getLocationAndThen(x=>
 	{
+		//alert(x[0].toFixed(6)+', '+x[1].toFixed(6));
 		if(distance(x[0],x[1],lat,lon)<x[2])
 			success();
 		else
