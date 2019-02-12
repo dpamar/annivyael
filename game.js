@@ -35,7 +35,12 @@ var id = null;
 window.onload = function()
 {
 	id = getId();
-	if(id != undefined)
+	if(id == 14)
+	{
+		hint = 'Je crois qu\'on est arrivé...';
+		showHint();
+	}
+	else if(id != undefined)
 	{
 		targetLat = places[id][0];
 		targetLong = places[id][1];
