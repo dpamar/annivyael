@@ -15,6 +15,11 @@ var places = [
 	[45.180516, 5.722224, 'Retour à la case départ ???']
 ];
 
+function getParam(paramName)
+{
+	return (window.location.href.split('?')[1].split('&').map(x=>x.split("=")).filter(x=>x[0]==paramName)[0]||[null,null])[1];
+}
+
 function getId()
 {
 	var h = window.location.href.split('?');
@@ -24,7 +29,8 @@ function getId()
 	}
 	else
 	{
-		return h[1].split('&').map(x=>x.split('=')).filter(x=>x[0]=='place')[0][1];
+		debug = getParam('debug')||0;
+		return getParam('place');
 	}
 }
 
@@ -32,6 +38,7 @@ var targetLat = null;
 var targetLong = null;
 var hint = null;
 var id = null;
+var debug = 0;
 window.onload = function()
 {
 	id = getId();
@@ -46,6 +53,12 @@ window.onload = function()
 		targetLong = places[id][1];
 		hint = places[id][2];
 		document.getElementById('photo').src = id+'.png';
+	}
+	if(id != undefined) 
+	{
+		var progress = document.getElementById('progressbar');
+		progress.className = `w3-${['red', 'yellow', 'green'][~~(id/5)]}`;
+		progress.style.width = ~~(id*100/14)+'%';
 	}
 }
 
@@ -77,7 +90,7 @@ var options = {
 function getLocationAndThen(doThis)
 {
 	navigator.geolocation.getCurrentPosition(
-		pos => doThis([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy]),
+		pos => doThis([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy*(debug?10000:1)]),
 		err => alert(`ERREUR (${err.code}): ${err.message}`),
 		options);
 }
