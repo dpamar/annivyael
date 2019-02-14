@@ -15,6 +15,8 @@ var places = [
 	[45.180516, 5.722224, 'Retour à la case départ ???']
 ];
 var defaultRange = 30;
+var invalidPlaceErrorMessage = 'Non, ce n\'est pas ici...';
+var finalMessage = 'Je crois qu\'on est arrivé...';
 
 var nbPlaces = places.length;
 
@@ -47,7 +49,7 @@ window.onload = function()
 	id = getId();
 	if(id == nbPlaces)
 	{
-		hint = 'Je crois qu\'on est arrivé...';
+		hint = finalMessage;
 		showHint();
 	}
 	else if(id != undefined)
@@ -116,12 +118,12 @@ function testFind()
 {
 	isCloseTo(targetLat, targetLong, defaultRange,
 		()=>window.location.href = window.location.href.replace(/place=[0-9]+/,'place='+(++id)),
-		()=>alert('Non, ce n\'est pas ici...'));
+		()=>alert(invalidPlaceErrorMessage));
 }
 
 function showDistance()
 {
-	getLocationAndThen(x=>alert(`c'est à environ ${~~distance(targetLat, targetLong, x[0], x[1])}m d'ici`));
+	getLocationAndThen(x=>alert(`C'est à environ ${~~distance(targetLat, targetLong, x[0], x[1])}m d'ici`));
 }
 
 function showHint()
