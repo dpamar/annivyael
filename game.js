@@ -66,7 +66,7 @@ window.onload = function()
   if(id != undefined) 
   {
     var progress = document.getElementById('progressbar');
-    progress.className = `w3-${['red', 'yellow', 'green'][~~(id/5)]}`;
+    progress.className = `w3-${['red', 'yellow', 'green'][~~(id * 3/(nbPlaces + 1))]}`;
     progress.style.width = ~~(id*100/nbPlaces)+'%';
   }
 }
