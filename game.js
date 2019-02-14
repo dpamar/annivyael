@@ -14,6 +14,7 @@ var places = [
 	[45.180376, 5.719218, 'Par dessus le pont'],
 	[45.180516, 5.722224, 'Retour à la case départ ???']
 ];
+var defaultRange = 30;
 
 var nbPlaces = places.length;
 
@@ -92,18 +93,19 @@ var options = {
 function getLocationAndThen(doThis)
 {
 	navigator.geolocation.getCurrentPosition(
-		pos => doThis([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy*(debug?10000:1)]),
+		pos => doThis([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy]),
 		err => alert(`ERREUR (${err.code}): ${err.message}`),
 		options);
 }
 
-function isCloseTo(lat, lon, success, failure)
+function isCloseTo(lat, lon, range, success, failure)
 {
 	getLocationAndThen(x=>
 	{
-		if(x[2]<30)x[2]=30;
-		//alert(x[0].toFixed(6)+', '+x[1].toFixed(6));
-		if(distance(x[0],x[1],lat,lon)<x[2])
+		var effectiveRange = x[2];
+		if(effectiveRange < range) effectiveRange = range;
+		if(debug) effectiveRange = 1000000;
+		if(distance(x[0],x[1],lat,lon) < effectiveRange)
 			success();
 		else
 			failure();
@@ -112,7 +114,7 @@ function isCloseTo(lat, lon, success, failure)
 
 function testFind()
 {
-	isCloseTo(targetLat, targetLong,
+	isCloseTo(targetLat, targetLong, defaultRange,
 		()=>window.location.href = window.location.href.replace(/place=[0-9]+/,'place='+(++id)),
 		()=>alert('Non, ce n\'est pas ici...'));
 }
