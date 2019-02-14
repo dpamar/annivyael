@@ -1,18 +1,18 @@
 var places = [
-	[45.181892, 5.722390, 'Vers la caserne de Bonne'],
-	[45.184168, 5.722311, 'En allant vers l\'école'],
-	[45.185029, 5.723160, 'Piscine...'],
-	[45.185624, 5.722760, 'De l\'autre côté de la rue'],
-	[45.186533, 5.723624, 'En avançant dans la ruelle'],
-	[45.186532, 5.722804, 'A gauche'],
-	[45.187176, 5.722497, 'On peut demander de l\'aide aux gens'],
-	[45.188017, 5.721318, 'En revenant sur la grande avenue'],
-	[45.187903, 5.719111, 'Vers le tramway'],
-	[45.183371, 5.718063, 'Direction la Makolette'],
-	[45.182770, 5.717695, 'C\'est très grand !'],
-	[45.182149, 5.717807, 'Derrière la Makolette'],
-	[45.180376, 5.719218, 'Par dessus le pont'],
-	[45.180516, 5.722224, 'Retour à la case départ ???']
+  [45.181892, 5.722390, 'Vers la caserne de Bonne'],
+  [45.184168, 5.722311, 'En allant vers l\'école'],
+  [45.185029, 5.723160, 'Piscine...'],
+  [45.185624, 5.722760, 'De l\'autre côté de la rue'],
+  [45.186533, 5.723624, 'En avançant dans la ruelle'],
+  [45.186532, 5.722804, 'A gauche'],
+  [45.187176, 5.722497, 'On peut demander de l\'aide aux gens'],
+  [45.188017, 5.721318, 'En revenant sur la grande avenue'],
+  [45.187903, 5.719111, 'Vers le tramway'],
+  [45.183371, 5.718063, 'Direction la Makolette'],
+  [45.182770, 5.717695, 'C\'est très grand !'],
+  [45.182149, 5.717807, 'Derrière la Makolette'],
+  [45.180376, 5.719218, 'Par dessus le pont'],
+  [45.180516, 5.722224, 'Retour à la case départ ???']
 ];
 var defaultRange = 30;
 var invalidPlaceErrorMessage = '<b>Non, ce n\'est pas ici...</b>';
@@ -23,21 +23,21 @@ var timeout = null;
 
 function getParam(paramName)
 {
-	return (window.location.href.split('?')[1].split('&').map(x=>x.split("=")).filter(x=>x[0]==paramName)[0]||[null,null])[1];
+  return (window.location.href.split('?')[1].split('&').map(x=>x.split("=")).filter(x=>x[0]==paramName)[0]||[null,null])[1];
 }
 
 function getId()
 {
-	var h = window.location.href.split('?');
-	if(h.length == 1)
-	{
-		window.location.href += '?place=0';
-	}
-	else
-	{
-		debug = getParam('debug')||0;
-		return getParam('place');
-	}
+  var h = window.location.href.split('?');
+  if(h.length == 1)
+  {
+    window.location.href += '?place=0';
+  }
+  else
+  {
+    debug = getParam('debug')||0;
+    return getParam('place');
+  }
 }
 
 var targetLat = null;
@@ -47,28 +47,28 @@ var id = null;
 var debug = 0;
 window.onload = function()
 {
-	id = getId();
-	if(id == nbPlaces)
-	{
-		showMessage(finalMessage);
-		window.clearTimeout(timeout);
-		var btns = document.getElementsByTagName('input');
-		for(var i=0; i<btns.length; i++)
-			btns[i].disabled = 'disabled';
-	}
-	else if(id != undefined)
-	{
-		targetLat = places[id][0];
-		targetLong = places[id][1];
-		hint = `<i>${places[id][2]}</i>`;
-		document.getElementById('photo').src = id+'.png';
-	}
-	if(id != undefined) 
-	{
-		var progress = document.getElementById('progressbar');
-		progress.className = `w3-${['red', 'yellow', 'green'][~~(id/5)]}`;
-		progress.style.width = ~~(id*100/nbPlaces)+'%';
-	}
+  id = getId();
+  if(id == nbPlaces)
+  {
+    showMessage(finalMessage);
+    window.clearTimeout(timeout);
+    var btns = document.getElementsByTagName('input');
+    for(var i=0; i<btns.length; i++)
+      btns[i].disabled = 'disabled';
+  }
+  else if(id != undefined)
+  {
+    targetLat = places[id][0];
+    targetLong = places[id][1];
+    hint = `<i>${places[id][2]}</i>`;
+    document.getElementById('photo').src = id+'.png';
+  }
+  if(id != undefined) 
+  {
+    var progress = document.getElementById('progressbar');
+    progress.className = `w3-${['red', 'yellow', 'green'][~~(id/5)]}`;
+    progress.style.width = ~~(id*100/nbPlaces)+'%';
+  }
 }
 
 function degreesToRadians(degrees) {
@@ -98,48 +98,48 @@ var options = {
 
 function getLocationAndThen(doThis)
 {
-	navigator.geolocation.getCurrentPosition(
-		pos => doThis([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy]),
-		err => showMessage(`ERREUR (${err.code}): ${err.message}`),
-		options);
+  navigator.geolocation.getCurrentPosition(
+    pos => doThis([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy]),
+    err => showMessage(`ERREUR (${err.code}): ${err.message}`),
+    options);
 }
 
 function isCloseTo(lat, lon, range, success, failure)
 {
-	getLocationAndThen(x=>
-	{
-		var effectiveRange = x[2];
-		if(effectiveRange < range) effectiveRange = range;
-		if(debug) effectiveRange = 1000000;
-		if(distance(x[0],x[1],lat,lon) < effectiveRange)
-			success();
-		else
-			failure();
-	});
+  getLocationAndThen(x=>
+  {
+    var effectiveRange = x[2];
+    if(effectiveRange < range) effectiveRange = range;
+    if(debug) effectiveRange = 1000000;
+    if(distance(x[0],x[1],lat,lon) < effectiveRange)
+      success();
+    else
+      failure();
+  });
 }
 
 function testFind()
 {
-	isCloseTo(targetLat, targetLong, defaultRange,
-		()=>window.location.href = window.location.href.replace(/place=[0-9]+/,'place='+(++id)),
-		()=>showMessage(invalidPlaceErrorMessage));
+  isCloseTo(targetLat, targetLong, defaultRange,
+    ()=>window.location.href = window.location.href.replace(/place=[0-9]+/,'place='+(++id)),
+    ()=>showMessage(invalidPlaceErrorMessage));
 }
 
 function showDistance()
 {
-	getLocationAndThen(x=>showMessage(`C'est à environ ${~~distance(targetLat, targetLong, x[0], x[1])}m d'ici`));
+  getLocationAndThen(x=>showMessage(`C'est à environ ${~~distance(targetLat, targetLong, x[0], x[1])}m d'ici`));
 }
 
 function showHint()
 {
-	showMessage(hint);
+  showMessage(hint);
 }
 
 function showMessage(msg)
 {
-	window.clearTimeout(timeout);
-	var elem = document.getElementById('message');
-	elem.innerHTML = msg;
-	elem.style.display = 'inline';
-	timeout = window.setTimeout(function(){elem.style.display = 'none';}, 2000);
+  window.clearTimeout(timeout);
+  var elem = document.getElementById('message');
+  elem.innerHTML = msg;
+  elem.style.display = 'inline';
+  timeout = window.setTimeout(function(){elem.style.display = 'none';}, 2000);
 }
