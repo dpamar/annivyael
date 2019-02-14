@@ -15,10 +15,11 @@ var places = [
 	[45.180516, 5.722224, 'Retour à la case départ ???']
 ];
 var defaultRange = 30;
-var invalidPlaceErrorMessage = 'Non, ce n\'est pas ici...';
+var invalidPlaceErrorMessage = '<b>Non, ce n\'est pas ici...</b>';
 var finalMessage = 'Je crois qu\'on est arrivé...';
 
 var nbPlaces = places.length;
+var timeout = null;
 
 function getParam(paramName)
 {
@@ -49,14 +50,14 @@ window.onload = function()
 	id = getId();
 	if(id == nbPlaces)
 	{
-		hint = finalMessage;
-		showHint();
+		showMessage(finalMessage);
+		window.clearTimeout(timeout);
 	}
 	else if(id != undefined)
 	{
 		targetLat = places[id][0];
 		targetLong = places[id][1];
-		hint = places[id][2];
+		hint = `<i>${places[id][2]}</i>`;
 		document.getElementById('photo').src = id+'.png';
 	}
 	if(id != undefined) 
@@ -96,7 +97,7 @@ function getLocationAndThen(doThis)
 {
 	navigator.geolocation.getCurrentPosition(
 		pos => doThis([pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy]),
-		err => alert(`ERREUR (${err.code}): ${err.message}`),
+		err => showMessage(`ERREUR (${err.code}): ${err.message}`),
 		options);
 }
 
@@ -118,17 +119,24 @@ function testFind()
 {
 	isCloseTo(targetLat, targetLong, defaultRange,
 		()=>window.location.href = window.location.href.replace(/place=[0-9]+/,'place='+(++id)),
-		()=>alert(invalidPlaceErrorMessage));
+		()=>showMessage(invalidPlaceErrorMessage));
 }
 
 function showDistance()
 {
-	getLocationAndThen(x=>alert(`C'est à environ ${~~distance(targetLat, targetLong, x[0], x[1])}m d'ici`));
+	getLocationAndThen(x=>showMessage(`C'est à environ ${~~distance(targetLat, targetLong, x[0], x[1])}m d'ici`));
 }
 
 function showHint()
 {
-	var hintElem = document.getElementById('hint');	
-	hintElem.innerText = hint;
-	hintElem.style.display = 'inline';
+	showMessage(hint);
+}
+
+function showMessage(msg)
+{
+	window.clearTimeout(timeout);
+	var elem = document.getElementById('message');
+	elem.innerHTML = msg;
+	elem.style.display = 'inline';
+	timeout = window.setTimeout(function(){elem.style.display = 'none';}, 2000);
 }
