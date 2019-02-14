@@ -15,6 +15,8 @@ var places = [
 	[45.180516, 5.722224, 'Retour à la case départ ???']
 ];
 
+var nbPlaces = places.length;
+
 function getParam(paramName)
 {
 	return (window.location.href.split('?')[1].split('&').map(x=>x.split("=")).filter(x=>x[0]==paramName)[0]||[null,null])[1];
@@ -42,7 +44,7 @@ var debug = 0;
 window.onload = function()
 {
 	id = getId();
-	if(id == 14)
+	if(id == nbPlaces)
 	{
 		hint = 'Je crois qu\'on est arrivé...';
 		showHint();
@@ -58,7 +60,7 @@ window.onload = function()
 	{
 		var progress = document.getElementById('progressbar');
 		progress.className = `w3-${['red', 'yellow', 'green'][~~(id/5)]}`;
-		progress.style.width = ~~(id*100/14)+'%';
+		progress.style.width = ~~(id*100/nbPlaces)+'%';
 	}
 }
 
