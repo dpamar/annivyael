@@ -52,6 +52,9 @@ window.onload = function()
 	{
 		showMessage(finalMessage);
 		window.clearTimeout(timeout);
+		var btns = document.getElementsByTagName('input');
+		for(var i=0; i<btns.length; i++)
+			btns[i].disabled = 'disabled';
 	}
 	else if(id != undefined)
 	{
