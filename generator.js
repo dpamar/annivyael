@@ -5,11 +5,13 @@ var currentPlaces = eval(atob(getParam("places")||'W10='));
 
 window.onload = function()
 {
-	showMessage('var places = ['
+	var code = 'var places = ['
 		+ currentPlaces
-			.map(x=>`<br/>&nbsp;&nbsp;&nbsp;&nbsp;[${x[0]}, ${x[1]}, '${x[2].replace(/'/g,"\\'")}']`)
+			.map(x=>`\n    [${x[0]}, ${x[1]}, '${x[2].replace(/'/g,"\\'")}']`)
 			.join(',')
-		+'<br/>];<br/>//Resume game designer URL: '+generateUrl(), true);
+		+'\n];\n//Resume game designer URL: '+generateUrl();
+	
+	document.getElementById("message").value = code;
 }
 
 var currentCount = 0;
@@ -50,4 +52,12 @@ function generateUrl()
 			.join(',')
 		+ ']';
 	return window.location.href.split('?')[0]+'?places='+btoa(param);
+}
+
+function copy2Clipboard()
+{
+	var copyText = document.getElementById("message");
+	copyText.select(); 
+	copyText.setSelectionRange(0, 999999);
+	document.execCommand("copy");
 }

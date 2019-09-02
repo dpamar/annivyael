@@ -6,16 +6,15 @@ var nbPlaces = places.length;
 
 function getId()
 {
-  var h = window.location.href.split('?');
-  if(h.length == 1)
+  var h = window.location.href.indexOf('?');
+  reverse = getParam('reverse')||0;
+  debug = getParam('debug')||0;
+  var result = getParam('place');
+  if(!result)
   {
-    window.location.href += '?place=0';
+    window.location.href += (h == -1 ? '?' : '&') + 'place=' + (reverse ? nbPlaces - 1 : 0);
   }
-  else
-  {
-    debug = getParam('debug')||0;
-    return getParam('place');
-  }
+  return result;
 }
 
 var targetLat = null;
@@ -23,10 +22,11 @@ var targetLong = null;
 var hint = null;
 var id = null;
 var debug = 0;
+var reverse = 0;
 window.onload = function()
 {
   id = getId();
-  if(id == nbPlaces)
+  if(id == nbPlaces || id == -1)
   {
     showMessage(finalMessage, true);
     var btns = document.getElementsByTagName('input');
@@ -50,7 +50,7 @@ window.onload = function()
 
 function testFind()
 {
-  var successFunction = ()=>window.location.href = window.location.href.replace(/place=[0-9]+/,'place='+(++id));
+  var successFunction = ()=>window.location.href = window.location.href.replace(/place=[0-9]+/,'place='+(reverse?--id:++id));
   if (debug)
  	  successFunction();
   else

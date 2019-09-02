@@ -6,8 +6,10 @@
 		<script src="generator.js"></script>
 	</head>
 	<body>
-		<div id="message" style="position: absolute; left: 50px; top: 50px; width: 600px; height: 400px; border-style: groove; border-color: coral; border-width: 3px"></div>
+		<textarea id="message" style="position: absolute; left: 50px; top: 50px; width: 600px; height: 400px; border-style: groove; border-color: coral; border-width: 3px"></textarea>
 		<br/>
 		<input style="position: absolute; top: 500px; left: 50px;" type="button" value="Ajouter ma position actuelle" style="width: 200px" onclick="addPlace()"/>
+		&nbsp;
+		<input style="position: absolute; top: 500px; left: 300px;" type="button" value="Copier dans le presse-papier" style="width: 200px" onclick="copy2Clipboard()"/>
 	</body>
 </html>
